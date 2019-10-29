@@ -1,47 +1,25 @@
-// Require dependencies
-var http = require("http");
-var fs = require("fs");
+// Pull in required dependencies
+var express = require('express');
+var bodyParser = require('body-parser');
+var path = require('path');
+
+// Configure the Express application
 var app = express();
-// Set our port to 8080
-var PORT = 8080;
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+const PORT = process.env.PORT || 3030;
 
-var server = http.createServer(handleRequest);
+// Expose the public directory to access CSS files
+app.use(express.static(path.join(__dirname, './app/public')));
 
-function handleRequest(req, res) {
+// Add middleware for parsing incoming request bodies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
 
-  // Capture the url the request is made to
-  var path = req.url;
+// Add the application routes
+require(path.join(__dirname, './app/routing/apiRoutes'))(app);
+require(path.join(__dirname, './app/routing/htmlRoutes'))(app);
 
-  // When we visit different urls, read and respond with different files
-  switch (path) {
-
-  case "/":
-    return fs.readFile(__dirname + "/home.html", function(err, data) {
-      if (err) throw err;
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(data);
-    });
-
-  case "/survey":
-    return fs.readFile(__dirname + "/survey.html", function(err, data) {
-      if (err) throw err;
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(data);
-    });
-
-    // default to rendering index.html, if none of above cases are hit
-  default:
-    return fs.readFile(__dirname + "/home.html", function(err, data) {
-      if (err) throw err;
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(data);
-    });
-  }
-}
-
-// Starts our server.
-server.listen(PORT, function() {
-  console.log("Server is listening on PORT: " + PORT);
+// Start listening on PORT
+app.listen(PORT, function() {
+  console.log('Friend Finder app is listening on PORT: ' + PORT);
 });

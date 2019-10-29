@@ -1,17 +1,20 @@
 {
-  "name": "express",
+  "name": "friend-finder",
   "version": "1.0.0",
-  "description": "",
-  "main": "server6.js",
+  "description": "An Node.js and Express based friend matching application.",
+  "main": "server.js",
   "dependencies": {
-    "express": "^4.16.3"
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "path": "^0.12.7"
+  },
+  "engines": {
+    "node": "6.9.5"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server6.js",
-    "watch": "nodemon server6.js"
-  },
-  "author": "",
-  "license": "ISC"
+    "start": "node server.js"
+  }
+ 
 }
